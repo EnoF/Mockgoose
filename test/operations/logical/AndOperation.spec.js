@@ -101,6 +101,18 @@ describe('Mockgoose $and Tests', function () {
                         done();
                     });
             });
+
+            it('Find values with Mongoose and operation', function (done) {
+                Model.find({'$and': [
+                        { price: 1.99 },
+                        { qty: { $gt: 20 } },
+                        { qty: { $lte: 21 } },
+                        { sale: true }
+                    ]}).exec().then(function (results) {
+                        expect(results.length).toBe(2);
+                        done();
+                    });
+            });
         });
     });
 

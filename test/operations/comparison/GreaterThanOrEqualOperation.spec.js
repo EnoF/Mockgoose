@@ -20,7 +20,10 @@ describe('Mockgoose $gte Tests', function () {
             }
         ],
         summary: {
-            total: Number
+            total: Number,
+            misc: {
+                total: Number
+            }
         }
     });
     var Model = mongoose.model('AllTests', Schema);
@@ -36,7 +39,10 @@ describe('Mockgoose $gte Tests', function () {
                     { size: 'L', num: 100, color: 'green' }
                 ],
                 summary: {
-                    total: 155
+                    total: 155,
+                    misc: {
+                        total: 95
+                    }
                 }
             },
             {
@@ -48,7 +54,10 @@ describe('Mockgoose $gte Tests', function () {
                     { size: '8', num: 120, color: 'brown' }
                 ],
                 summary: {
-                    total: 270
+                    total: 270,
+                    misc: {
+                        total: 105
+                    }
                 }
             },
             {
@@ -60,7 +69,10 @@ describe('Mockgoose $gte Tests', function () {
                     { size: 'L', num: 120, color: 'green' }
                 ],
                 summary: {
-                    total: 230
+                    total: 230,
+                    misc: {
+                        total: 60
+                    }
                 }
             },
             {
@@ -70,7 +82,10 @@ describe('Mockgoose $gte Tests', function () {
                     { size: 'M', num: 30, color: 'green' }
                 ],
                 summary: {
-                    total: 30
+                    total: 30,
+                    misc: {
+                        total: 75
+                    }
                 }
             }, function (err) {
                 done(err);
@@ -163,12 +178,32 @@ describe('Mockgoose $gte Tests', function () {
                 }, done);
         });
 
+        it('Be able to match deeply nested values not in list $gte', function (done) {
+            Model.find({
+                summary: {misc: { total: {$gte: 95 } } }
+            }).exec().then(function (results) {
+                    expect(results).toBeDefined();
+                    expect(results.length).toBe(2);
+                    done();
+                }, done);
+        });
+
         it('Be able to match dot notation nested values not in list $gte', function (done) {
             Model.find({
                 'summary.total': { $gte: 155 }
             }).exec().then(function (results) {
                     expect(results).toBeDefined();
                     expect(results.length).toBe(3);
+                    done();
+                }, done);
+        });
+
+        it('Be able to match dot notation deeply nested values not in list $gte', function (done) {
+            Model.find({
+                'summary.misc.total': {$gte: 95 }
+            }).exec().then(function (results) {
+                    expect(results).toBeDefined();
+                    expect(results.length).toBe(2);
                     done();
                 }, done);
         });
